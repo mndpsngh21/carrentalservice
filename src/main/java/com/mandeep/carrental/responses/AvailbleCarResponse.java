@@ -1,20 +1,17 @@
 package com.mandeep.carrental.responses;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import com.mandeep.carrental.models.Car;
+import com.mandeep.carrental.models.Vehicle;
 
+import lombok.Data;
+
+@Data
 public class AvailbleCarResponse extends BaseResponse{
 	
-	public ArrayList<Car> availableCars;
+	public List<Vehicle> availableCar;
 
-	public ArrayList<Car> getAvailableCars() {
-		return availableCars;
-	}
-
-	public void setAvailableCars(ArrayList<Car> availableCars) {
-		this.availableCars = availableCars;
-	}
+	
 	
 	
 

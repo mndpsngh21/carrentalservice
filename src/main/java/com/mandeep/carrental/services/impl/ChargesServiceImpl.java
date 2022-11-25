@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mandeep.carrental.entities.ChargesEntity;
+import com.mandeep.carrental.entities.VehiceStatusEntity;
 import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.repositories.ChargesRepository;
 import com.mandeep.carrental.response.model.Charges;
@@ -37,12 +38,38 @@ public class ChargesServiceImpl implements ChargesService{
 		charges.setPerKMCharges(charges.getPerKMCharges());
 		return charges;
 	}
+	
+	private ChargesEntity from(Charges charges) {
+		ChargesEntity chargesEntity= new ChargesEntity();
+		chargesEntity.setDailyCharges(charges.getDailyCharges());
+		chargesEntity.setHourlyCharges(charges.getHourlyCharges());
+		chargesEntity.setPerKMCharges(charges.getPerKMCharges());
+		return chargesEntity;
+	}
 
 
 	@Override
 	public void addDefault() {
-		// TODO Auto-generated method stub
 		
+		
+	}
+
+
+	@Override
+	public void setDefaultCharges() {
+		chargesRepository.save(from(new Charges(5, 50, 500)));
+		chargesRepository.save(from(new Charges(7, 100, 1000)));
+	}
+
+
+	@Override
+	public ChargesEntity getChargesById(long id) throws InvalidInformationException {
+		Optional<ChargesEntity> optional= chargesRepository.findById(id);
+		if(!optional.isPresent()) {
+			throw new InvalidInformationException("No Information found for vehicle status");
+		}
+		return optional.get();
+	
 	}
 
 }

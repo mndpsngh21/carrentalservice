@@ -1,12 +1,14 @@
 package com.mandeep.carrental.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mandeep.carrental.entities.VehiceStatusEntity;
+import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.models.VehicleStatus;
 import com.mandeep.carrental.repositories.VehicleStatusRepository;
 import com.mandeep.carrental.responses.VehicleStatusResponse;
@@ -49,5 +51,23 @@ public class VehicleStatusImpl implements VehicleStatusService {
 		entity.setStatus(vehicleStatus.toString());
 		return entity;
    }
+
+	@Override
+	public VehiceStatusEntity getStatusById(long id) throws InvalidInformationException {
+		Optional<VehiceStatusEntity> optional= repository.findById(id);
+		if(!optional.isPresent()) {
+			throw new InvalidInformationException("No Information found for vehicle status");
+		}
+		return optional.get();
+	}
+
+	@Override
+	public VehicleStatusResponse getAllStatuses() {
+		VehicleStatusResponse response= new VehicleStatusResponse();
+		List<VehicleStatus> statuses=  repository.findAll().stream().map(t->from(t)).collect(Collectors.toList());
+		response.createDefaultSucces(Constants.ResponseMessages.DEFAULT);
+		response.setStatus(statuses);
+		return response;
+	}
 
 }

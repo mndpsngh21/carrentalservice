@@ -40,14 +40,14 @@ public class VehicleEntity {
 	@Column
 	private double parkingLongitude;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "charges_id", referencedColumnName = "id")
+	@OneToOne
+	@JoinColumn(name = "charges_id")
 	private ChargesEntity charges;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "type_id", referencedColumnName = "id")
+	@OneToOne
+	@JoinColumn(name = "type_id")
 	private VehicleTypeEntity vehicleType;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "status_id", referencedColumnName = "id")
+	@OneToOne
+	@JoinColumn(name = "status_id")
 	private VehiceStatusEntity vehicleStatus;
 	
 	

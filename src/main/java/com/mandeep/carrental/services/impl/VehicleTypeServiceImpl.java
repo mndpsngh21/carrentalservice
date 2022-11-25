@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mandeep.carrental.entities.VehicleTypeEntity;
+import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.models.VehicleType;
 import com.mandeep.carrental.repositories.VehicleTypeRepository;
 import com.mandeep.carrental.responses.VehicleTypeResponse;
@@ -49,6 +50,15 @@ public class VehicleTypeServiceImpl implements VehicleTypeService{
 	public VehicleType findById(Long id) {
 		Optional<VehicleTypeEntity> optional= repository.findById(id);
 		return from(optional.get());
+	}
+	@Override
+	public VehicleTypeEntity getVehicleTypeById(long id) throws InvalidInformationException {
+		Optional<VehicleTypeEntity> optional= repository.findById(id);
+		if(!optional.isPresent()) {
+			throw new InvalidInformationException("Vehilce Type is not present");
+		}
+		
+		return optional.get();
 	}
 	
 	

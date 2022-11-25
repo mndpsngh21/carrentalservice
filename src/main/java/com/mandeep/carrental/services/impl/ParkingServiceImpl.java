@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mandeep.carrental.entities.ParkingEntity;
+import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.models.Location;
 import com.mandeep.carrental.repositories.ParkingRepository;
 import com.mandeep.carrental.requests.ParkingRequest;
@@ -128,6 +129,33 @@ public class ParkingServiceImpl implements ParkingService {
 		}
 		return response;
 	}
+	@Override
+	public void addDefaultParkings() {
+		Location location1= Constants.Parkings.location_1;
+		Location location2= Constants.Parkings.location_2;
+		Location location3= Constants.Parkings.location_3;
+
+		addParking(createParkingRequest("Parking Address 1","Bangalore",location1.getLatitude(),location1.getLongitude()));
+		addParking(createParkingRequest("Parking Address 2","Bangalore",location2.getLatitude(),location2.getLongitude()));
+		addParking(createParkingRequest("Parking Address 3","Bangalore",location3.getLatitude(),location3.getLongitude()));
+	}
+	
+	ParkingRequest createParkingRequest(String address,String city, double lat, double lng) {
+		ParkingRequest parkingRequest= new ParkingRequest();
+		parkingRequest.setLocation(new Location(lat,lng));
+		parkingRequest.setCity(city);
+		parkingRequest.setAddress(address);
+		return parkingRequest;
+	}
+	@Override
+	public Parking getParkingByLocation(double parkingLatitude, double parkingLongitude) throws InvalidInformationException {
+		Optional<ParkingEntity> optional=  repository.findByLocation(parkingLatitude,parkingLongitude);
+		if(!optional.isPresent()) {
+			throw new InvalidInformationException("No Information found for Parking Location");
+		}
+		return from(optional.get());
+	}
+	
 	
 	
 	
