@@ -6,7 +6,8 @@ public class Constants {
 
 	public class ResponseCode{
 
-		public static final int DEFAULT_SUCCESS = 200;;
+		public static final int DEFAULT_SUCCESS = 200;
+		public static final int DUPLICATE_RECORD = 422;
 	
 	}
 	public class ResponseMessages{

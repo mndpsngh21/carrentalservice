@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mandeep.carrental.exceptions.UserAlreadyExistsException;
 import com.mandeep.carrental.models.Account;
 import com.mandeep.carrental.models.User;
 import com.mandeep.carrental.repositories.AccountRepository;
@@ -34,7 +35,14 @@ public class UserServiceImpl implements UserService{
 		account.setEmail(request.getEmail());
 		account.setPassword(request.getPassword());
 		account.setUserName(request.getUserName());
-		Account saved =repository.createAccount(account);
+		Account saved;
+		try {
+			saved = repository.createAccount(account);
+		} catch (UserAlreadyExistsException e) {
+			//e.printStackTrace();
+			response.createDefaultError("User is already present with this details",Constants.ResponseCode.DUPLICATE_RECORD);
+			return  response;
+		}
 	
 		if(saved.getId()!=null &&! saved.getId().isEmpty()) {
 			response.createDefaultSucces("Account created successfully");

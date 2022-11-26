@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mandeep.carrental.requests.BookingCancelRequest;
 import com.mandeep.carrental.requests.BookingConfirmationRequest;
 import com.mandeep.carrental.responses.BookingResponse;
 import com.mandeep.carrental.services.BookingService;
@@ -23,8 +24,8 @@ public class PaymentController {
 	}
 	
 	@PostMapping("/canceled")
-	public BookingResponse cancelBooking(BookingConfirmationRequest request) {
-		return bookingService.confirmBooking(request);
+	public BookingResponse cancelBooking(BookingCancelRequest request) {
+		return bookingService.cancelRequest(request);
 	}
 	
 	

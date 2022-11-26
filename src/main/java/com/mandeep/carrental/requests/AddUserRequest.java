@@ -8,8 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequest {
-	 public String id;
+public class AddUserRequest {
 	 public String email;
 	 public String userName;
 	 public String password;

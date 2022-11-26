@@ -46,22 +46,29 @@ public class DayInvoiceService implements InvoiceService {
         return buildInvoice(booking,isFinal);
     }
 
+	/**
+	 * Calculate invoice based on timings
+	 * @param booking
+	 * @param isFinal
+	 * @return
+	 */
     private Invoice buildInvoice(VehicleBookings booking, boolean isFinal) {
         Invoice invoice = new Invoice();
         invoice.setInvoiceId(UUID.randomUUID().toString());
         invoice.setReservationId(booking.getBookingId());
         User user = UserRepository.userUserIdMap.get(booking.getAccountId());
         invoice.setUserId(user.getEmail());
-        Duration rentedDuration;
-        if (booking.getBookingTill() == null)
-            rentedDuration =
-                    Duration.between(booking.getBookingFrom(),
-                    		booking.getBookingTill().plusDays(1));
-        else
+        Duration rentedDuration =null;
+        if(isFinal) {
+            rentedDuration = Duration.between(booking.getBookingFrom(),booking.getReturnOn());        	
+        }
+        else {
             rentedDuration = Duration.between(booking.getBookingFrom(),booking.getBookingTill());
+        }
         double hours = Math.ceil(rentedDuration.toHours());
 
-        double days = Math.ceil(hours / 24) + hours % 24;
+        double days       = Math.ceil(hours / 24);
+        double extrahours = hours % 24;
 
         // read vehicle cost information
         VehicleEntity vehicleEntity=  booking.getVehicleEntity();
@@ -70,7 +77,8 @@ public class DayInvoiceService implements InvoiceService {
         double dailyCost = chargesEntity.getDailyCharges();
         double fixedCost = chargesEntity.getFixedCharges();
 
-        double rentalCost = days * dailyCost + fixedCost;
+        double hourCost = extrahours* chargesEntity.getHourlyCharges();
+        double rentalCost = days * dailyCost + fixedCost + hourCost;
         double taxes = rentalCost * TAX_PERCENTAGE;
 
         invoice.setUsageCharges(rentalCost);

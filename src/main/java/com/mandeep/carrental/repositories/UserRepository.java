@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mandeep.carrental.entities.VehicleEntity;
 import com.mandeep.carrental.exceptions.AccountDoesNotExistsException;
+import com.mandeep.carrental.exceptions.UserAlreadyExistsException;
 import com.mandeep.carrental.models.Account;
 import com.mandeep.carrental.models.User;
 import com.mandeep.carrental.models.VehicleReservation;
@@ -29,7 +30,11 @@ public class UserRepository implements AccountRepository {
     VehicleRepository repository;
     
 
-    public Account createAccount(Account account) {
+    public Account createAccount(Account account) throws UserAlreadyExistsException {
+    	if(userUserIdMap.get(account.getUserName())!=null||userMap.get(account.getEmail())!=null) {
+    		throw new UserAlreadyExistsException("User is already present");
+    	}
+    	
     	account.setId(UUID.randomUUID().toString());
         userMap.putIfAbsent(account.getEmail(), (User) account);
         userUserIdMap.putIfAbsent(account.getUserName(), (User) account);

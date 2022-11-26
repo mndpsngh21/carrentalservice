@@ -111,6 +111,8 @@ public class BookingServiceImpl implements BookingService{
 		dbInfo.setDeletedOn(LocalDateTime.now(ZoneId.of("UTC")));
 		VehicleBookings updated=  bookingRepository.save(dbInfo);
 		bookingResponse.setBookings(updated);
+		// refunds can be handled on later stages
+		
 		return bookingResponse;
 	}
 
