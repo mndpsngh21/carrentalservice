@@ -21,7 +21,7 @@ import com.mandeep.carrental.utils.Constants;
 @Service
 public class DayInvoiceService implements InvoiceService {
 
-    private static final double TAX_PERCENTAGE = .18;
+    public static final double TAX_PERCENTAGE = .18;
 
     @Autowired
     VehicleService vehicleService;
@@ -57,7 +57,7 @@ public class DayInvoiceService implements InvoiceService {
         invoice.setInvoiceId(UUID.randomUUID().toString());
         invoice.setReservationId(booking.getBookingId());
         User user = UserRepository.userUserIdMap.get(booking.getAccountId());
-        invoice.setUserId(user.getEmail());
+        invoice.setUserId(user.getId());
         Duration rentedDuration =null;
         if(isFinal) {
             rentedDuration = Duration.between(booking.getBookingFrom(),booking.getReturnOn());        	

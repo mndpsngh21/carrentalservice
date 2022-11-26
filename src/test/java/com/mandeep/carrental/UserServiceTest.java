@@ -40,8 +40,13 @@ public class UserServiceTest {
 		UserAccountResponse response= service.addUser(userRequest);
 		Assert.assertEquals(200, response.getCode());
 		UserAccountResponse duplicate= service.addUser(userRequest);
-		Assert.assertEquals(Constants.ResponseCode.DUPLICATE_RECORD, duplicate.getCode());
+		Assert.assertEquals(Constants.ResponseCode.DUPLICATE_RECORD, duplicate.getCode());	
+	}
 	
+	@Test
+	public void invalidUserDoesNotAllowedToLogin() {
+		UserAccountResponse accountResponse= service.attemptLogin("SomeRandSome", "Mandeep");
+		Assert.assertEquals(Constants.ResponseCode.NOT_FOUND, accountResponse.getCode());
 	}
 	
 }

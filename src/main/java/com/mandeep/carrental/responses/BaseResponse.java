@@ -40,14 +40,14 @@ public class BaseResponse {
 
 	
 	public void createDefaultError(String message) {
-		this.isSuccess=true;
+		this.isSuccess=false;
 		this.message=message;
 		this.code= Constants.ResponseCode.DEFAULT_SUCCESS;
 
 	}
 	
 	public void createDefaultError(String message, int errorCode) {
-		this.isSuccess=true;
+		this.isSuccess=false;
 		this.message=message;
 		this.code= errorCode;
 

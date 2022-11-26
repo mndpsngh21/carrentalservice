@@ -12,4 +12,6 @@ public interface UserService {
 
 	UserAccountResponse attemptLogin(String username, String password);
 
+	void clearData();
+
 }

@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService{
 		}
 	
 		if(saved.getId()!=null &&! saved.getId().isEmpty()) {
+			response.setUser((User)saved);
 			response.createDefaultSucces("Account created successfully");
 		}
 		else {
@@ -73,8 +74,14 @@ public class UserServiceImpl implements UserService{
 			response.setUser(user.get());
 			return response;
 		}
-		response.createDefaultError("User Not found!", 404);
+		response.createDefaultError("User Not found!", Constants.ResponseCode.NOT_FOUND);
 		return response;
+	}
+
+	@Override
+	public void clearData() {
+		repository.clearData();
+		
 	}
 
 }

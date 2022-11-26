@@ -59,6 +59,18 @@ public class BookingServiceImpl implements BookingService{
 	@Override
 	public BookingResponse bookCar(BookingRequest request) {
 		BookingResponse response = new BookingResponse();
+
+		List<VehicleBookings> rangeBookings =  bookingRepository.getBookingForDateRange( request.getBookingFrom(), request.getBookingTill());		
+		
+		if(rangeBookings!=null&& rangeBookings.size()>0) {
+			Optional<VehicleBookings> vehicleBookings= rangeBookings.stream().filter(b->isSameVehicle(b,request.getVehicleId())).findAny();
+			if(vehicleBookings.isPresent()) {
+				response.createDefaultError("Already booking present for vehicle", Constants.ResponseCode.INVALID_REQUEST);
+				return response;				
+			}
+			
+		}
+		
 		try {
 			VehicleBookings booking= from(request);
 		    VehicleEntity vehicle= vehicleService.getVehicleByUUID(request.getVehicleId());
@@ -73,12 +85,17 @@ public class BookingServiceImpl implements BookingService{
 		    booking.setPickupParkingId(request.getBookingParkingId());
 		    VehicleBookings saved=  bookingRepository.save(booking);
 		    response.setBookings(saved);
+		    response.setEstimatedInvoiceUrl(estimateURL+"/"+booking.getBookingId());
 		    response.createDefaultSucces(Constants.ResponseMessages.BOOKED_SUCCESS);
 		} catch (InvalidInformationException e) {
 			response.createDefaultError(e.getMessage());
 		}
 		
 		return response;
+	}
+
+	private boolean isSameVehicle(VehicleBookings b, String vehicleId) {
+		return b.getVehicleEntity().getUuid().equalsIgnoreCase(vehicleId);
 	}
 
 	private VehicleBookings from(BookingRequest request) throws InvalidInformationException {
@@ -170,7 +187,7 @@ public class BookingServiceImpl implements BookingService{
 		if(bookings.isPresent()) {
 			VehicleBookings dbInfo=bookings.get();
 			dbInfo.setBookingStatus(ReservationStatus.COMPLETED.toString());
-			dbInfo.setReturnOn(LocalDateTime.now(ZoneId.of("UTC")));
+			dbInfo.setReturnOn(request.getReturnTimings());
 			vehicleService.updateVehicleCurrentLocation(dbInfo.getVehicleEntity().getId(), parking.getLatitude(),parking.getLongitude());
 			bookingRepository.save(dbInfo);
 			response.createDefaultSucces(Constants.ResponseMessages.BOOKING_CONFIRMED);

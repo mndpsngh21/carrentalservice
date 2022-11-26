@@ -68,7 +68,7 @@ public class ParkingServiceImpl implements ParkingService {
 		Parking entity= new Parking();
 		entity.setAddress(saved.getAddress());
 		entity.setCity(saved.getCity());
-		entity.setId(UUID.randomUUID().toString());
+		entity.setId(saved.getUuid());
 		Location location = new Location();
 		location.setLatitude(saved.getLatitude());
 		location.setLongitude(saved.getLongitude());

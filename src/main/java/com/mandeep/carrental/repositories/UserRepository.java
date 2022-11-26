@@ -37,10 +37,11 @@ public class UserRepository implements AccountRepository {
     	
     	account.setId(UUID.randomUUID().toString());
         userMap.putIfAbsent(account.getEmail(), (User) account);
-        userUserIdMap.putIfAbsent(account.getUserName(), (User) account);
+        userUserIdMap.putIfAbsent(account.getId(), (User) account);
         return account;
     }
 
+    
     public void resetPassword(String email, String password) throws AccountDoesNotExistsException {
         if (userMap.get(email) == null)
             throw new AccountDoesNotExistsException("Account does not exist.");
@@ -80,6 +81,14 @@ public class UserRepository implements AccountRepository {
 			return Optional.empty();
 		}
 		return Optional.of(user);
+	}
+
+
+	public void clearData() {
+		// TODO Auto-generated method stub
+		userMap.clear();
+		users.clear();
+		userUserIdMap.clear();
 	}
 
     

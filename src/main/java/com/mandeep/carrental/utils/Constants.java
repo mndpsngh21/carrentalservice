@@ -8,6 +8,8 @@ public class Constants {
 
 		public static final int DEFAULT_SUCCESS = 200;
 		public static final int DUPLICATE_RECORD = 422;
+		public static final int NOT_FOUND = 404;
+		public static final int INVALID_REQUEST = 400;
 	
 	}
 	public class ResponseMessages{
