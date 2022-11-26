@@ -21,4 +21,7 @@ public interface BookingRepository  extends JpaRepository<VehicleBookings, Long>
 
 	List<VehicleBookings> findByBookingStatus(String string);
 
+	@Query("Select b from VehicleBookings b where b.accountId=:user_id and b.bookingFrom between :from and :till or b.bookingTill between :from and :till")
+	List<VehicleBookings> findByAccountIdBetweenDate(String user_id, LocalDateTime from, LocalDateTime till);
+
 }

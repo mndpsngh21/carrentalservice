@@ -19,4 +19,6 @@ public interface VehicleService {
 	  void addDefaultVehicles();
 
 	  VehicleEntity getVehicleByUUID(String vehicleId) throws InvalidInformationException;
+
+	  void updateVehicleCurrentLocation(Long vehicleId, Double latitude, Double longitude);
 }

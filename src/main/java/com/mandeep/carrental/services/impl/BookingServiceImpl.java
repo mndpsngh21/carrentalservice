@@ -7,8 +7,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.mandeep.carrental.entities.ParkingEntity;
 import com.mandeep.carrental.entities.VehicleBookings;
 import com.mandeep.carrental.entities.VehicleEntity;
 import com.mandeep.carrental.exceptions.InvalidInformationException;
@@ -16,11 +18,15 @@ import com.mandeep.carrental.models.ReservationStatus;
 import com.mandeep.carrental.models.Vehicle;
 import com.mandeep.carrental.repositories.BookingRepository;
 import com.mandeep.carrental.requests.BookingCancelRequest;
+import com.mandeep.carrental.requests.BookingCompleteRequest;
 import com.mandeep.carrental.requests.BookingConfirmationRequest;
 import com.mandeep.carrental.requests.BookingRequest;
+import com.mandeep.carrental.response.BookingCompletionResponse;
 import com.mandeep.carrental.responses.AvailbleCarResponse;
 import com.mandeep.carrental.responses.BookingResponse;
+import com.mandeep.carrental.responses.UserBookingResponse;
 import com.mandeep.carrental.services.BookingService;
+import com.mandeep.carrental.services.ParkingService;
 import com.mandeep.carrental.services.VehicleSearchService;
 import com.mandeep.carrental.services.VehicleService;
 import com.mandeep.carrental.utils.Constants;
@@ -34,6 +40,15 @@ public class BookingServiceImpl implements BookingService{
 	VehicleService vehicleService;
 	@Autowired
 	VehicleSearchService vehicleSearchService;
+	
+	@Autowired
+	ParkingService parkingService;
+	
+	@Value("${url.estimate}")
+	String estimateURL;
+
+	@Value("${url.final}")
+	String finalURL;
 	
 	@Override
 	public AvailbleCarResponse getAvailableCars(LocalDateTime from, LocalDateTime till, String parkingSlotId) {
@@ -55,6 +70,7 @@ public class BookingServiceImpl implements BookingService{
 		    booking.setCreatedOn(LocalDateTime.now(ZoneId.of("UTC")));
 		    booking.setBookingId(UUID.randomUUID().toString());
 		    booking.setBookingStatus(ReservationStatus.PENDING.toString());
+		    booking.setPickupParkingId(request.getBookingParkingId());
 		    VehicleBookings saved=  bookingRepository.save(booking);
 		    response.setBookings(saved);
 		    response.createDefaultSucces(Constants.ResponseMessages.BOOKED_SUCCESS);
@@ -111,9 +127,6 @@ public class BookingServiceImpl implements BookingService{
 			bookingResponse.setBookings(updated);
 			return bookingResponse;
 		}
-		else {
-			// received invalid information
-		}
 		bookingResponse.createDefaultError("No Booking is present with this booking Id", 404);
 		return bookingResponse;
 	}
@@ -128,7 +141,48 @@ public class BookingServiceImpl implements BookingService{
 	public void cancel(VehicleBookings booking) {
 		booking.setBookingStatus(ReservationStatus.CONFIRMED.toString());
 		booking.setUpdatedOn(LocalDateTime.now(ZoneId.of("UTC")));
-		VehicleBookings updated=  bookingRepository.save(booking);
+		bookingRepository.save(booking);
+	}
+
+	@Override
+	public UserBookingResponse getUserBooking(String user_id, LocalDateTime from, LocalDateTime till) {
+		UserBookingResponse bookingResponse= new UserBookingResponse();
+		List<VehicleBookings> userBookings = bookingRepository.findByAccountIdBetweenDate(user_id,from,till);
+		bookingResponse.createDefaultSucces(Constants.ResponseMessages.DEFAULT);
+		bookingResponse.setBookings(userBookings);
+		return bookingResponse;
+	}
+
+	@Override
+	public BookingCompletionResponse completeBooking(BookingCompleteRequest request) {
+		BookingCompletionResponse response= new BookingCompletionResponse();
+		Optional<VehicleBookings> bookings=  bookingRepository.findByBookingId(request.getBookingId());
+		ParkingEntity parking= null;
+		try {
+			 parking =  parkingService.getParkingById(request.getDropParkingId());
+		} catch (InvalidInformationException e) {
+			response.createDefaultError("Drop location should be a valid parking location", 404);
+			return response;
+		}
+		
+		if(bookings.isPresent()) {
+			VehicleBookings dbInfo=bookings.get();
+			dbInfo.setBookingStatus(ReservationStatus.COMPLETED.toString());
+			dbInfo.setReturnOn(LocalDateTime.now(ZoneId.of("UTC")));
+			vehicleService.updateVehicleCurrentLocation(dbInfo.getVehicleEntity().getId(), parking.getLatitude(),parking.getLongitude());
+			bookingRepository.save(dbInfo);
+			response.createDefaultSucces(Constants.ResponseMessages.BOOKING_CONFIRMED);
+			response.setFinalInvoiceUrl(finalURL+"/"+request.getBookingId());
+			return response;
+		}
+		response.createDefaultError("No Booking is present with this booking Id", 404);
+		return response;	
+	}
+
+	@Override
+	public VehicleBookings getBookingForId(String bookingId) {
+		Optional<VehicleBookings> bookings=  bookingRepository.findByBookingId(bookingId);
+		return bookings.get();
 	}
 
 }

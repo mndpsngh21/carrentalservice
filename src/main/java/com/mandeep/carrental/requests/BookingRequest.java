@@ -12,6 +12,8 @@ import lombok.Data;
 public class BookingRequest{
 String vehicleId;
 String userId;
+String bookingParkingId;
+
 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 LocalDateTime bookingFrom;

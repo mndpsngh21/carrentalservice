@@ -27,6 +27,9 @@ public class ChargesEntity extends MetaInfo{
 	@Column
 	double dailyCharges;
 
-	
+
+	@Column
+	double fixedCharges;
+
 	
 }

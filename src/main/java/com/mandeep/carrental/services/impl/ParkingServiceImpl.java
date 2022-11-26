@@ -155,6 +155,14 @@ public class ParkingServiceImpl implements ParkingService {
 		}
 		return from(optional.get());
 	}
+	@Override
+	public ParkingEntity getParkingById(String parkingId) throws InvalidInformationException {
+		Optional<ParkingEntity> optional=  repository.findByUuid(parkingId);
+		if(!optional.isPresent()) {
+			throw new InvalidInformationException("No Information found for Parking Location");
+		}
+		return optional.get();
+	}
 	
 	
 	

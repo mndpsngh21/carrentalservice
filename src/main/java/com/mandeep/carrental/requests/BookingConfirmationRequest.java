@@ -6,6 +6,7 @@ import lombok.Data;
 public class BookingConfirmationRequest {
 
 	String bookingId;
+	String paymentTransactionRef;
 	boolean isPaymentSuccess;
 	
 	

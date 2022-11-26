@@ -10,4 +10,6 @@ public interface UserService {
 
 	UserAccountListResponse getUsers();
 
+	UserAccountResponse attemptLogin(String username, String password);
+
 }

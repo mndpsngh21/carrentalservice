@@ -51,6 +51,12 @@ LocalDateTime bookingDate;
 String bookingStatus;
 
 @Column
+String pickupParkingId;
+
+@Column
+String dropParkingId;
+
+@Column
 Long startMeter;
 
 @Column

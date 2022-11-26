@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -68,39 +69,16 @@ public class UserRepository implements AccountRepository {
 		return buffer.toString();
 	}
 
-	public List<VehicleEntity> getBookedVehicles(String userId) {
-
-        List<VehicleReservation> vehicleReservationList =
-                VehicleReservationRepository.vehicleReservations
-                        .stream().filter(vehicleReservation ->
-                        vehicleReservation.getUsrId().equalsIgnoreCase(userId))
-                        .collect(Collectors.toList());
-//        return vehicleReservationList.stream()
-//                .map(vehicleReservation ->
-//                repository.findByUuid(vehicleReservation.getAccocatedVehicleId()))
-//                .collect(Collectors.toList());
-
-        return  new ArrayList<VehicleEntity>();
-
+	public Optional<User> findUser(String username, String password) {
+		User user  =  userUserIdMap.get(username);
+		if(user==null||!user.getPassword().equals(password)) {
+			return Optional.empty();
+		}
+		return Optional.of(user);
 	}
-    
 
-    public List<VehicleEntity> getBookedVehiclesByDateRange(String userId, LocalDateTime startDate,
-                                                  LocalDateTime endDate) {
-        List<VehicleReservation> vehicleReservationList =
-                VehicleReservationRepository.vehicleReservations
-                        .stream().filter(vehicleReservation ->
-                        vehicleReservation.getUsrId().equalsIgnoreCase(userId) &&
-                                ((vehicleReservation.getDueDate() != null &&
-                                        startDate.isBefore(vehicleReservation.getDueDate()))
-                                        && (vehicleReservation.getFromDate() != null
-                                        && endDate.isAfter(vehicleReservation.getFromDate()))))
-                        .collect(Collectors.toList());
-//        return vehicleReservationList.stream()
-//                .map(vehicleReservation ->  repository.findByUuid(vehicleReservation.getAccocatedVehicleId()))
-//                .collect(Collectors.toList());
-        
-        return  new ArrayList<VehicleEntity>();
-    }
+    
+    
+    
 
 }

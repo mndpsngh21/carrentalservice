@@ -8,5 +8,6 @@ import lombok.Data;
 public class BookingResponse extends BaseResponse{
 
 	VehicleBookings bookings;
+	String estimatedInvoiceUrl;
 	
 }

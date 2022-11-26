@@ -1,5 +1,6 @@
 package com.mandeep.carrental.services;
 
+import com.mandeep.carrental.entities.ParkingEntity;
 import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.models.Location;
 import com.mandeep.carrental.requests.ParkingRequest;
@@ -20,5 +21,7 @@ public interface ParkingService {
 	void addDefaultParkings();
 
 	Parking getParkingByLocation(double parkingLatitude, double parkingLongitude) throws InvalidInformationException;
+
+	ParkingEntity getParkingById(String dropParkingId) throws InvalidInformationException;
 
 }

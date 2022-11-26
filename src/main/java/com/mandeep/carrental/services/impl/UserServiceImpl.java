@@ -1,6 +1,7 @@
 package com.mandeep.carrental.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,21 @@ public class UserServiceImpl implements UserService{
 		List<User> users= repository.getAllUsers();
 		response.setUsers(users);
 		response.createDefaultSucces(Constants.ResponseMessages.DEFAULT);
+		return response;
+	}
+
+	@Override
+	public UserAccountResponse attemptLogin(String username, String password) {
+		UserAccountResponse response= new UserAccountResponse();
+		
+		Optional<User> user=   repository.findUser(username,password);
+		if(user.isPresent()) {
+			response.setToken(username);
+			response.createDefaultSucces("User found!");
+			response.setUser(user.get());
+			return response;
+		}
+		response.createDefaultError("User Not found!", 404);
 		return response;
 	}
 

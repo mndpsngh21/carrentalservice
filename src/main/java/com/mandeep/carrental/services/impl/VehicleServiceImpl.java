@@ -158,4 +158,15 @@ public class VehicleServiceImpl implements VehicleService {
 		return vehicleEntity.get();
 	}
 
+	@Override
+	public void updateVehicleCurrentLocation(Long vehicleId, Double latitude, Double longitude) {
+		Optional<VehicleEntity> vehicleEntity=  vehicleRepository.findById(vehicleId);
+		if(vehicleEntity.isPresent()) {
+		  VehicleEntity entity = vehicleEntity.get();
+		  entity.setParkingLatitude(latitude);
+		  entity.setParkingLongitude(longitude);
+		  vehicleRepository.save(entity);
+		}
+	}
+
 }
