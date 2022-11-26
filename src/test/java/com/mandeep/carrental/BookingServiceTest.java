@@ -1,10 +1,11 @@
 package com.mandeep.carrental;
 
+import static org.junit.Assert.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,30 +80,30 @@ public class BookingServiceTest {
 	@Test
 	public void testBookingForUser() {
 		BookingResponse bookingResponse = bookingService.bookCar(createBookingRequest(1, 3));
-		Assert.assertTrue(bookingResponse.isSuccess());
+		assertTrue(bookingResponse.isSuccess());
 	}
 
 	@Test
 	public void sameDateBookingNotAllowed() {
 		BookingResponse bookingResponse = bookingService.bookCar(createBookingRequest(1, 3));
-		Assert.assertEquals(false,bookingResponse.isSuccess());
+		assertEquals(false,bookingResponse.isSuccess());
 	}
 
 	
 	@Test
 	public void bookingShouldHaveEstimateURL() {
 		BookingResponse bookingResponse = bookingService.bookCar(createBookingRequest(4, 5));
-		Assert.assertNotNull(bookingResponse.getEstimatedInvoiceUrl());
+		assertNotNull(bookingResponse.getEstimatedInvoiceUrl());
 	}
 	
 	@Test
 	public void bookingShouldbeAvailableForUser() {
 		BookingRequest bookingrequest=createBookingRequest(7, 8);
 		BookingResponse bookingResponse = bookingService.bookCar(bookingrequest);
-		Assert.assertNotNull(bookingResponse.getEstimatedInvoiceUrl());
+		assertNotNull(bookingResponse.getEstimatedInvoiceUrl());
 		// check if bookings available for user
 		UserBookingResponse userBookingResponse = bookingService.getUserBooking(bookingrequest.getUserId(), bookingrequest.getBookingFrom(), bookingrequest.getBookingTill());
-		Assert.assertEquals(1,userBookingResponse.getBookings().size());
+		assertEquals(1,userBookingResponse.getBookings().size());
 	}
 
 }

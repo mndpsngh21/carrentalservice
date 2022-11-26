@@ -22,6 +22,7 @@ import com.mandeep.carrental.models.VehicleReservation;
 @Repository
 public class UserRepository implements AccountRepository {
     public static Map<String, User> userMap = new HashMap<>();
+    public static Map<String, User> userNameMap = new HashMap<>();
     public static Map<String, User> userUserIdMap = new HashMap<>();
     public static List<User> users = new ArrayList<>();
     
@@ -38,6 +39,7 @@ public class UserRepository implements AccountRepository {
     	account.setId(UUID.randomUUID().toString());
         userMap.putIfAbsent(account.getEmail(), (User) account);
         userUserIdMap.putIfAbsent(account.getId(), (User) account);
+        userNameMap.putIfAbsent(account.getUserName(), (User) account);
         return account;
     }
 
@@ -76,7 +78,7 @@ public class UserRepository implements AccountRepository {
 	}
 
 	public Optional<User> findUser(String username, String password) {
-		User user  =  userUserIdMap.get(username);
+		User user  =  userNameMap.get(username);
 		if(user==null||!user.getPassword().equals(password)) {
 			return Optional.empty();
 		}

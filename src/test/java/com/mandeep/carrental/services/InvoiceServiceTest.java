@@ -1,10 +1,11 @@
 package com.mandeep.carrental.services;
 
+import static org.junit.Assert.*;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -90,30 +91,30 @@ class InvoiceServiceTest {
 		bookingCompleteRequest.setDropParkingId(testParking.getId());
 		bookingCompleteRequest.setReturnTimings(bookingRequest.getBookingTill().minusDays(1));
 		bookingService.completeBooking(bookingCompleteRequest);
-		Assert.assertTrue(bookingResponse.isSuccess());
+		assertTrue(bookingResponse.isSuccess());
 		Invoice invoice = invoiceService.computeInvoice(bookingResponse.getBookings().getBookingId(), true);
-		Assert.assertNotNull(invoice);
+		assertNotNull(invoice);
 		Charges charges= testVehicle.getCharges();
 		double dailycharges = charges.getDailyCharges();
 		Duration rentedDuration =Duration.between(bookingRequest.getBookingFrom(),bookingRequest.getBookingTill().minusDays(1));
 		double amount = rentedDuration.toDays()*dailycharges;
 		amount+= amount*DayInvoiceService.TAX_PERCENTAGE;
-		Assert.assertEquals(amount, invoice.getTotal(),0.0001);
+		assertEquals(amount, invoice.getTotal(),0.0001);
 	}
 
 	@Test
 	void testGetEstimatedInvoice() {
-		BookingRequest bookingRequest =createBookingRequest(1, 3);
+		BookingRequest bookingRequest =createBookingRequest(20,25);
 		BookingResponse bookingResponse = bookingService.bookCar(bookingRequest);
-		Assert.assertTrue(bookingResponse.isSuccess());
+		assertTrue(bookingResponse.isSuccess());
 		Invoice invoice = invoiceService.computeInvoice(bookingResponse.getBookings().getBookingId(), false);
-		Assert.assertNotNull(invoice);
+		assertNotNull(invoice);
 		Charges charges= testVehicle.getCharges();
 		double dailycharges = charges.getDailyCharges();
 		Duration rentedDuration =Duration.between(bookingRequest.getBookingFrom(),bookingRequest.getBookingTill());
 		double amount = rentedDuration.toDays()*dailycharges;
 		amount+= amount*DayInvoiceService.TAX_PERCENTAGE;
-		Assert.assertEquals(amount, invoice.getTotal(),0.0001);
+		assertEquals(amount, invoice.getTotal(),0.0001);
 	}
 
 }

@@ -24,7 +24,7 @@ public class UserServiceTest {
 		UserRequest userRequest= new UserRequest();
 		userRequest.setUserName("Mandeep");
 		userRequest.setPassword("Mandeep");
-		userRequest.setEmail("dummy@email.com");
+		userRequest.setEmail("Mandeep@email.com");
 		service.addUser(userRequest);
 		UserAccountResponse accountResponse= service.attemptLogin("Mandeep", "Mandeep");
 		Assert.assertEquals("Mandeep", accountResponse.getUser().getUserName());
@@ -34,9 +34,9 @@ public class UserServiceTest {
 	@Test
 	public void duplicateUserDoesNotExists() {
 		UserRequest userRequest= new UserRequest();
-		userRequest.setUserName("Mandeep");
-		userRequest.setPassword("Mandeep");
-		userRequest.setEmail("dummy@email.com");
+		userRequest.setUserName("Mandeep1");
+		userRequest.setPassword("Mandeep1");
+		userRequest.setEmail("dummy1@email.com");
 		UserAccountResponse response= service.addUser(userRequest);
 		Assert.assertEquals(200, response.getCode());
 		UserAccountResponse duplicate= service.addUser(userRequest);

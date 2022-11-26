@@ -28,6 +28,7 @@
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/AppSecurityConfig.java
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/controllers/VehicleController.java
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/responses/VehicleListResponse.java
+/home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/exceptions/UserAlreadyExistsException.java
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/requests/AddUserRequest.java
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/responses/AddParkingResponse.java
 /home/mandeep/Desktop/Learning/Interview/carrentalservice/src/main/java/com/mandeep/carrental/responses/VehicleResponse.java
