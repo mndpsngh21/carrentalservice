@@ -2,19 +2,19 @@ package com.mandeep.carrental.services.impl;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mandeep.carrental.entities.ChargesEntity;
-import com.mandeep.carrental.entities.VehiceStatusEntity;
 import com.mandeep.carrental.exceptions.InvalidInformationException;
 import com.mandeep.carrental.repositories.ChargesRepository;
 import com.mandeep.carrental.response.model.Charges;
-import com.mandeep.carrental.responses.ChargeResponse;
 import com.mandeep.carrental.services.ChargesService;
 
 @Service
 public class ChargesServiceImpl implements ChargesService{
+	Logger logger = LoggerFactory.getLogger(ChargesServiceImpl.class);
 
 	@Autowired
 	ChargesRepository chargesRepository;

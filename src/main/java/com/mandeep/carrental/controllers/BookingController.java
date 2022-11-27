@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.websocket.server.PathParam;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,11 +26,15 @@ import com.mandeep.carrental.responses.UserBookingResponse;
 import com.mandeep.carrental.services.BookingService;
 import com.mandeep.carrental.services.VehicleSearchService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
+
 @RestController
 @RequestMapping("/booking")
 @CrossOrigin
 public class BookingController {
-
+	Logger logger = LoggerFactory.getLogger(BookingController.class);
 	@Autowired
 	BookingService bookingService;
 

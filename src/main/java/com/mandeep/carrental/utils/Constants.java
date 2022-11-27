@@ -20,6 +20,7 @@ public class Constants {
 		public static final String DELETE_SUCCESS = "Record deleted successfully";
 		public static final String BOOKED_SUCCESS = "Booked successfully";
 		public static final String BOOKING_CONFIRMED = "Booking confirmed";
+		public static final String FAILURE = "Failure";
 		
 	}
 	

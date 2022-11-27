@@ -3,6 +3,8 @@ package com.mandeep.carrental.services.impl;
 import java.time.Duration;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import com.mandeep.carrental.utils.Constants;
 
 @Service
 public class DayInvoiceService implements InvoiceService {
+	Logger logger = LoggerFactory.getLogger(DayInvoiceService.class);
 
     public static final double TAX_PERCENTAGE = .18;
 

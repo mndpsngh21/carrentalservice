@@ -3,6 +3,8 @@ package com.mandeep.carrental.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import com.mandeep.carrental.utils.Constants;
 
 @Service
 public class UserServiceImpl implements UserService{
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	UserRepository repository;
@@ -40,12 +43,14 @@ public class UserServiceImpl implements UserService{
 			saved = repository.createAccount(account);
 		} catch (UserAlreadyExistsException e) {
 			//e.printStackTrace();
+			logger.error("Duplicate user");
 			response.createDefaultError("User is already present with this details",Constants.ResponseCode.DUPLICATE_RECORD);
 			return  response;
 		}
 	
 		if(saved.getId()!=null &&! saved.getId().isEmpty()) {
 			response.setUser((User)saved);
+			logger.info("Account created successfully :" +account.getUserName());
 			response.createDefaultSucces("Account created successfully");
 		}
 		else {
